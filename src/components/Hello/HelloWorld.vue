@@ -79,7 +79,7 @@
 </style>
 <template>
 <div>
-<div id="window" @mouseover="stop" @mouseleave="goOnPlay">
+<div id="window" @mouseover="stop" @mouseleave="autoPlay">
   <ul class="box" :style="boxStyle">
     <li>
       <img :src="slides[slides.length - 1].img" alt="image">
@@ -189,9 +189,6 @@ export default {
         window.clearInterval(this.clock)
         this.clock = null
       } 
-    },
-    goOnPlay() {
-      this.autoPlay()
     },
     jump(index) {
       const direc = index - this.currentIndex >= 0 ? -1 : 1
