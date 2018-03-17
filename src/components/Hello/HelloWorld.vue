@@ -46,6 +46,9 @@
     border-radius:50%;
     cursor:pointer;
   }
+  .arrowWrapper:hover{
+    background-color:rgba(0,0,0,.6);
+  }
   .arrow-left{
     left:2%;
     transform:translateY(-50%);
@@ -149,21 +152,22 @@ export default {
   methods:{
     init() {
       this.autoPlay()
-      window.onblur = this.stop
-      window.onfocus = this.goOnPlay
+      window.onblur = function() { clearInterval(this.clock) }.bind(this)
+      window.onfocus = function() { this.autoPlay() }.bind(this)
     },
-    move(n, direction) {
+    move(n, direction, speed) {
+      speed = speed || 30
       if (!this.transitionEnd) return
       this.transitionEnd = false
       const willDistance = this.distance + n
       const animate = () =>  {
         if ((direction === -1 && this.distance > willDistance) || (direction === 1 && this.distance < willDistance) ){
-          this.distance += 30 * direction          
+          this.distance += speed * direction          
           setTimeout(animate, 20)
         } else {
           this.transitionEnd = true
           this.distance = willDistance
-          this.currentIndex++
+          direction === -1 ? this.currentIndex += Math.abs(n/600) : this.currentIndex -= Math.abs(n/600)
           if (willDistance < -3000) {
             this.currentIndex = 1
             this.distance = -600
@@ -182,17 +186,20 @@ export default {
       }, 3000)
     },
     stop() {
+      console.log('stop')
+      console.log(this.clock)
       clearInterval(this.clock)
     },
     goOnPlay() {
+      console.log('autoPlay')
       this.autoPlay()
     },
     jump(index) {
       console.log(index)
-      const destination = index * -600
-      console.log(destination)
-      this.move(destination, -1)
-      this.currentIndex = index
+      console.log(this.currentIndex)
+      const direc = index - this.currentIndex >= 0 ? -1 : 1
+      const distance = (index - this.currentIndex) * -600
+      this.move(distance, direc, 60)
     },
     beforeDestroy() {
       clearInterval(this.clock)
