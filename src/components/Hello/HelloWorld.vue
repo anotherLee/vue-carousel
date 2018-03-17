@@ -151,7 +151,7 @@ export default {
   methods:{
     init() {
       this.autoPlay()
-      window.onblur = function() { clearInterval(this.clock) }.bind(this)
+      window.onblur = function() { this.stop() }.bind(this)
       window.onfocus = function() { this.autoPlay() }.bind(this)
     },
     move(n, direction, speed) {
@@ -182,11 +182,13 @@ export default {
     autoPlay() {
       this.clock = setInterval(() => {
         this.move(-600, -1)
-      }, 5000)
+      }, 3000)
     },
     stop() {
-      console.log('clearInterval')
-      clearInterval(this.clock)
+      if (this.autoPlay && this.clock) {
+        window.clearInterval(this.clock)
+        this.clock = null
+      } 
     },
     goOnPlay() {
       this.autoPlay()
