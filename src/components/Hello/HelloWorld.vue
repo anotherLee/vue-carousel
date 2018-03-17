@@ -132,7 +132,6 @@ export default {
           img: '../../static/images/5.jpg'
         }
       ],
-      transitionTime:0.5,
       currentIndex:1,
       width:600,
       distance:-600,
@@ -183,20 +182,16 @@ export default {
     autoPlay() {
       this.clock = setInterval(() => {
         this.move(-600, -1)
-      }, 3000)
+      }, 5000)
     },
     stop() {
-      console.log('stop')
-      console.log(this.clock)
+      console.log('clearInterval')
       clearInterval(this.clock)
     },
     goOnPlay() {
-      console.log('autoPlay')
       this.autoPlay()
     },
     jump(index) {
-      console.log(index)
-      console.log(this.currentIndex)
       const direc = index - this.currentIndex >= 0 ? -1 : 1
       const distance = (index - this.currentIndex) * -600
       this.move(distance, direc, 60)
